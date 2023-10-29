@@ -3,7 +3,7 @@
 /**
 * @brief Поиск значения energy
 * @param  "m" масса для функции energy
-* @param  "v" скоркость для функции energy
+* @param  "v" скорость для функции energy
 * @return Возвращает результат функции getEnergy
 */
 double getEnergy(double m, double v);
@@ -31,5 +31,5 @@ int main()
 
 double getEnergy(double m, double v)
 {
-    return m*pow(v,2)/2;
+    return m * (double) (pow (v, 2) / 2);
 }
