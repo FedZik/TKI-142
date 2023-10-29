@@ -1,27 +1,50 @@
 #include <stdio.h>
 #include <math.h>
 
+/**
+* @brief Поиск значения volume
+* @param r радиус для функции getVolume
+* @return Возвращает результат функции getVolume
+*/
+float getVolume(float r);
 
-double volume_func(double r)
+/**
+* @brief Поиск значения surfaceSqueare
+* @param r радиус для функции getSurfaceSquare
+* @return Возвращает результат функции getSurfaceSquare
+*/
+float getSurfaceSquare(float r);
+
+/**
+* @brief Точка входа в программу
+* @return Возвращает 0, если программа работает корректно, иначе 1
+*/
+int main()
+{
+    float r;
+    scanf("%f", &r);
+    if (r > 0 && r != 1)
+    {
+        float volume=getVolume(r);
+        float surfaceSquare=getSurfaceSquare(r);
+
+        printf("\n surfaceSquare=%f",surfaceSquare);
+        printf("\n volume=%f",volume);
+    }
+    else
+    {
+        printf("\n %s", "Неправильный ввод");
+    }
+    return 0;
+}
+
+
+float getVolume(float r)
 {
     return 4*M_PI*pow(r,3)/3;
 }
-double surface_square_func(double r)
+
+float getSurfaceSquare(float r)
 {
     return 4*M_PI*pow(r,2);
-}
-
-
-int main()
-{
-    double r;
-
-    scanf("%lf", &r);
-
-    double volume=volume_func(r);
-    double surface_square=surface_square_func(r);
-
-    printf("\n surface_square=%lf",surface_square);
-    printf("\n volume=%lf",volume);
-    return 0;
 }
