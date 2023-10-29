@@ -1,5 +1,24 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+
+enum solve
+{
+    VOLUME = 1,
+    SURFACEAREA = 2
+};
+
+/**
+* @brief Получешние введеного значения из консоли
+* @return Возвращает число при условии правильного ввода
+*/
+float getNumber();
+
+/**
+* @brief Выбор типа расчёта
+* @return Возвращает выбор пользователя
+*/
+int selectSolve();
 
 /**
 * @brief Поиск значения volume
@@ -9,11 +28,11 @@
 float getVolume(float r);
 
 /**
-* @brief Поиск значения surfaceSqueare
-* @param r радиус для функции getSurfaceSquare
-* @return Возвращает результат функции getSurfaceSquare
+* @brief Поиск значения surfaceArea
+* @param r радиус для функции getSurfaceArea
+* @return Возвращает площадь поверхности
 */
-float getSurfaceSquare(float r);
+float getSurfaceArea(float r);
 
 /**
 * @brief Точка входа в программу
@@ -21,19 +40,16 @@ float getSurfaceSquare(float r);
 */
 int main()
 {
-    float r;
-    scanf("%f", &r);
-    if (r > 0 && r != 1)
+    float r = getNumber();
+    printf("Enter %d to get volume, %d to get surface area: ", VOLUME, SURFACEAREA);
+    int solve = selectSolve();
+    if (solve == VOLUME)
     {
-        float volume=getVolume(r);
-        float surfaceSquare=getSurfaceSquare(r);
-
-        printf("\n surfaceSquare=%f",surfaceSquare);
-        printf("\n volume=%f",volume);
+        printf("volume = %f", getVolume(r));
     }
-    else
+    if (solve == SURFACEAREA)
     {
-        printf("\n %s", "Неправильный ввод");
+        printf("surface area = %f", getSurfaceArea(r));
     }
     return 0;
 }
@@ -41,10 +57,40 @@ int main()
 
 float getVolume(float r)
 {
-    return 4*M_PI*pow(r,3)/3;
+    return 4 * M_PI * pow(r, 3) / 3;
 }
 
-float getSurfaceSquare(float r)
+float getSurfaceArea(float r)
 {
-    return 4*M_PI*pow(r,2);
+    return 4 * M_PI * pow(r, 2);
+}
+
+float getNumber()
+{
+    float number;
+    scanf("%f", &number);
+    if (number != 1 && number > 0)
+    {
+        return number;
+    }
+    else
+    {
+        printf("\n" "Неправильный ввод" "\n");
+        abort();
+    }
+}
+
+int selectSolve()
+{
+    int number;
+    scanf("%d", &number);
+    if (number == VOLUME || number == SURFACEAREA)
+    {
+        return number;
+    }
+    else
+    {
+        printf("\n" "Неправильный ввод" "\n");
+        abort();
+    }
 }
