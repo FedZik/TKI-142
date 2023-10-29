@@ -31,5 +31,5 @@ int main()
 
 double getEnergy(double m, double v)
 {
-    return m * (double) (pow (v, 2) / 2);
+    return m /1000 * (double) (pow (v, 2) / 2);
 }
