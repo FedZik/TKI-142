@@ -29,7 +29,6 @@ float getPerimeter(float firstSide, float secondSide);
 /**
 * @brief Точка входа в программу
 * @return Возвращает 0, если программа работает корректно, иначе 1
-* @if Проверка правильности ввода
 */
 int main()
 {
@@ -42,8 +41,8 @@ int main()
         float square = getSquare(firstSide, secondSide);
         float perimeter = getPerimeter(firstSide, secondSide);
 
-        printf("\n square=", square);
-        printf("\n preimeter=", perimeter);
+        printf("\n square=%f", square);
+        printf("\n preimeter=%f", perimeter);
     }
     else
     {
