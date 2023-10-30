@@ -1,12 +1,19 @@
 #include <stdio.h>
 
 /**
-* @brief Поиск значения energy
-* @param  "m" масса для функции energy
-* @param  "v" скорость для функции energy
-* @return Возвращает результат функции getEnergy
+* @brief Поиск кинетической энергии
+* @param "m" масса
+* @param "v" скорость
+* @param "si" значение для перевода массы в систему СИ
+* @return Возвращает численное значение кинетической энергии
 */
-double getEnergy(double m, double v);
+double getEnergy(double m, double v, const si);
+
+/**
+* @brief проверка введеного значения
+* @return Возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
+*/
+double getNumber();
 
 /**
 * @brief Точка входа в программу
@@ -15,21 +22,26 @@ double getEnergy(double m, double v);
 int main()
 {
     double m, v;
-    scanf("%lf", &m);
-    scanf("%lf", &v);
-    if (m > 0 && v > 0 && m != 1 && v != 1)
-    {
-        double energy = getEnergy(m, v);
-        printf("\n energy=%lf", energy);
-    }
-    else
-    {
-        printf("\n %s", "Неправильный ввод");
-    }
+    const si = 1000;
+    m = getNumber();
+    v = getNumber();
+    double energy = getEnergy(m, v, si);
+    printf("\n energy=%lf", energy);
     return 0;
 }
 
-double getEnergy(double m, double v)
+double getEnergy(double m, double v, const si)
 {
-    return m /1000 * (double) (pow (v, 2) / 2);
+    return m / si * (double) (pow (v, 2) / 2);
 }
+
+double getNumber() 
+{ 
+ double number; 
+ if (scanf("%lf", &number) == 1 && (number > 0)) 
+ { 
+  return number; 
+ } 
+ printf("%s" "Wrong value"); 
+ abort(); 
+} 
