@@ -51,6 +51,10 @@ int main()
     {
         printf("surface area = %f", getSurfaceArea(r));
     }
+    if (solve != VOLUME && solve != SURFACEAREA)
+    {
+        printf("\n " "Неправильный ввод" "\n");
+    }
     return 0;
 }
 
@@ -68,14 +72,13 @@ float getSurfaceArea(float r)
 float getNumber()
 {
     float number;
-    scanf("%f", &number);
-    if (number != 1 && number > 0)
+    if (scanf("%f", &number) == 1 && number > 0)
     {
         return number;
     }
     else
     {
-        printf("\n" "Неправильный ввод" "\n");
+        printf("\n " "Неправильный ввод" "\n");
         abort();
     }
 }
@@ -83,8 +86,7 @@ float getNumber()
 int selectSolve()
 {
     int number;
-    scanf("%d", &number);
-    if (number == VOLUME || number == SURFACEAREA)
+    if (scanf("%d", &number) == VOLUME || number == SURFACEAREA)
     {
         return number;
     }
