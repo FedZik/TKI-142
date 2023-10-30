@@ -1,30 +1,36 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /**
-* @brief Поиск значения secondSide
-* @param  "firstSide" для функции secondSide
-* @param  "n" для функции secondSide
-* @return Возвращает результат функции getSecondSide
+* @brief Поиск второй стороны
+* @param  "firstSide" первая сторона
+* @param  "n" коэффициент, на который надо умножить 1 сторону для получения второй
+* @return Возвращает численное значение второй стороны
 */
 float getSecondSide(float firstSide, float n);
 
 /**
-* @brief Поиск значения square
-* @param "firstSide" для функции getSquare
-* @param "secondSide" для функции getSquare
-* @return Возвращает результат функции getSquare
+* @brief Поиск площади
+* @param "firstSide" первая сторона
+* @param "secondSide" вторая сторона
+* @return Возвращает численное значение площади
 */
 float getSquare(float firstSide, float secondSide);
 
 /**
-* @brief Поиск значения perimeter
-* @param "firstSide" для функции getPerimeter
-* @param "secondSide" для функции getPerimeter
-* @return Возвращает результат функции getPerimeter
+* @brief Поиск периметра
+* @param "firstSide" первая сторона
+* @param "secondSide" вторая сторона
+* @return Возвращает численное значение периметра
 */
 float getPerimeter(float firstSide, float secondSide);
 
+/**
+* @brief проверка введеного значения
+* @return Возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
+*/
+float getNumber();
 
 /**
 * @brief Точка входа в программу
@@ -32,22 +38,15 @@ float getPerimeter(float firstSide, float secondSide);
 */
 int main()
 {
-    float firstSide, n;
-    scanf("%f", &firstSide);
-    scanf("%f", &n);
-    if (firstSide > 0 && n > 0 && firstSide != 1 && n != 1)
-    {
-        float secondSide = getSecondSide(firstSide, n);
-        float square = getSquare(firstSide, secondSide);
-        float perimeter = getPerimeter(firstSide, secondSide);
+    float firstSide = getNumber();
+    float n = getNumber();
 
-        printf("\n square=%f", square);
-        printf("\n preimeter=%f", perimeter);
-    }
-    else
-    {
-        printf("\n %s", "Неправильный ввод");
-    }
+    float secondSide = getSecondSide(firstSide, n);
+    float square = getSquare(firstSide, secondSide);
+    float perimeter = getPerimeter(firstSide, secondSide);
+
+    printf("\n square=%f", square);
+    printf("\n preimeter=%f", perimeter);
     return 0;
 }
 
@@ -67,3 +66,14 @@ float getPerimeter(float firstSide, float secondSide)
 {
     return firstSide * 2 + secondSide * 2;
 }
+
+float getNumber() 
+{ 
+ float number; 
+ if (scanf("%f", &number) == 1 && (number > 0)) 
+ { 
+  return number; 
+ } 
+ printf("\n" "Неправильный ввод"); 
+ abort(); 
+} 
