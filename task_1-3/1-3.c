@@ -1,38 +1,38 @@
 #include <stdio.h>
 
 /**
-* @brief Поиск кинетической энергии
-* @param "m" масса
-* @param "v" скорость
-* @param "si" значение для перевода массы в систему СИ
-* @return Возвращает численное значение кинетической энергии
+* @brief расчет кинетической энергии
+* @param mass - масса
+* @param speed - скорость
+* @return возвращает численное значение кинетической энергии
 */
-double getEnergy(double m, double v, const si);
+double getEnergy(double mass, double speed);
 
 /**
 * @brief проверка введеного значения
-* @return Возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
+* @param si значение для перевода массы в систему СИ
+* @return возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
 */
 double getNumber();
 
 /**
-* @brief Точка входа в программу
-* @return Возвращает 0, если программа работает корректно, иначе 1
+* @brief точка входа в программу
+* @return возвращает 0, если программа работает корректно, иначе 1
 */
 int main()
 {
-    double m, v;
-    const si = 1000;
-    m = getNumber();
-    v = getNumber();
-    double energy = getEnergy(m, v, si);
+    double mass, speed;
+    mass = getNumber();
+    speed = getNumber();
+    double energy = getEnergy(mass, speed);
     printf("\n energy=%lf", energy);
     return 0;
 }
 
-double getEnergy(double m, double v, const si)
+double getEnergy(double mass, double speed)
 {
-    return m / si * (double) (pow (v, 2) / 2);
+    const si = 1000;
+    return mass / si * (double) (pow (speed, 2) / 2);
 }
 
 double getNumber() 
