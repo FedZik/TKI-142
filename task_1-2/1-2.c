@@ -69,11 +69,11 @@ float getPerimeter(float firstSide, float secondSide)
 
 float getNumber() 
 { 
- float number; 
- if (scanf("%f", &number) == 1 && (number > 0)) 
- { 
-  return number; 
- } 
- printf("\n" "Неправильный ввод"); 
- abort(); 
-} 
+    float number; 
+    if (scanf("%f", &number) != 1 || (number < 0)) 
+    { 
+         printf("%s" "Wrong value"); 
+         abort();  
+    } 
+    return number;
+}
