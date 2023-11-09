@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
-
 /**
 * @brief расчет y
 * @param x значение х 
