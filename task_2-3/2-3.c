@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /**
-* @brief проверяет среднее значение на целое
+* @brief проверяет целое ли среднее значение
 * @param  firstNumber первое число
 * @param  secondNumber второе число
 * @return возвращает 1 если среднее значение - целое число, иначе 0
@@ -19,7 +19,7 @@ float getNumber();
 /**
 * @brief проверяет число на четность
 * @param  number проверяемое число
-* @return возвращает 1 если среднее значение - целое число, иначе 0
+* @return возвращает 1 если число четное, иначе 0
 */
 bool isEven(int number);
 
@@ -47,13 +47,15 @@ bool parityFunc(int firstNumber, int secondNumber)
 {
     return (isEven(firstNumber) && isEven(secondNumber) == false) || (isEven(firstNumber) == false && isEven(secondNumber));
 }
-bool isEven(int number) {
+
+bool isEven(int number) 
+{
     return ((number % 2) == 0);
 }
 
 float getNumber() 
 { 
- float number; 
+    float number; 
     if (scanf("%f", &number) != 1 || (number < 0)) 
     { 
          printf("%s" "Wrong value"); 
