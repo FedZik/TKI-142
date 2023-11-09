@@ -38,16 +38,16 @@ int main()
 float getNumber() 
 { 
  float number; 
- if (scanf("%f", &number) == 1) 
- { 
-  return number; 
- } 
- printf("\n" "Неправильный ввод"); 
- abort(); 
-} 
+    if (scanf("%f", &number) != 1 || (number < 0)) 
+    { 
+         printf("%s" "Wrong value"); 
+         abort();  
+    } 
+    return number;
+}
 
 double yFunc(double x, const double a)
 {
-    if (x <= a){ return x * sin(a) * x; };
-    if (x > a){ return x * pow(x - a, 1.0 / 3); };
+    if (x <= a){ return x * sin(a) * x; }
+    else { return x * pow(x - a, 1.0 / 3); };
 }
