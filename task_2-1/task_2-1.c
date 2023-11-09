@@ -41,7 +41,7 @@ float getSurfaceArea(float r);
 int main()
 {
     float r = getNumber();
-    printf("Enter %d to get volume, %d to get surface area: ", VOLUME, SURFACEAREA);
+    printf("введите %d чтобы получить объем, или %d чтобы получить площадь поверхности: ", VOLUME, SURFACEAREA);
     int solve = selectSolve();
     if (solve == VOLUME)
     {
@@ -69,18 +69,15 @@ float getSurfaceArea(float r)
     return 4 * M_PI * pow(r, 2);
 }
 
-float getNumber()
-{
-    float number;
-    if (scanf("%f", &number) == 1 && number > 0)
-    {
-        return number;
-    }
-    else
-    {
-        printf("\n " "Неправильный ввод" "\n");
-        abort();
-    }
+float getNumber() 
+{ 
+ float number; 
+    if (scanf("%f", &number) != 1 || (number < 0)) 
+    { 
+         printf("%s" "Неправильный ввод"); 
+         abort();  
+    } 
+    return number;
 }
 
 int selectSolve()
