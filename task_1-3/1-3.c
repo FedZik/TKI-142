@@ -13,7 +13,7 @@ double getEnergy(double mass, double speed);
 * @param convertToGramm значение для перевода массы в систему СИ
 * @return возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
 */
-double getNumber();
+float getNumber();
 
 /**
 * @brief точка входа в программу
@@ -35,13 +35,13 @@ double getEnergy(double mass, double speed)
     return mass / convertToGramm * (double) (pow (speed, 2) / 2);
 }
 
-double getNumber() 
+float getNumber() 
 { 
- double number; 
- if (scanf("%lf", &number) == 1 && (number > 0)) 
- { 
-  return number; 
- } 
- printf("%s" "Wrong value"); 
- abort(); 
-} 
+ float number; 
+    if (scanf("%f", &number) != 1 || (number < 0)) 
+    { 
+         printf("%s" "Wrong value"); 
+         abort();  
+    } 
+    return number;
+}
