@@ -1,17 +1,27 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
 /**
-* @brief проверка чисел на четность
+* @brief проверяет среднее значение на целое
 * @param  firstNumber первое число
 * @param  secondNumber второе число
-* @return возвращает 1 если среднее значение - целое число, иначе 2
+* @return возвращает 1 если среднее значение - целое число, иначе 0
 */
-int parityFunc(int firstNumber, int secondNumber);
+bool parityFunc(int firstNumber, int secondNumber);
 
 /**
 * @brief проверка введеного значения
 * @return возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
 */
 float getNumber();
+
+/**
+* @brief проверяет число на четность
+* @param  number проверяемое число
+* @return возвращает 1 если среднее значение - целое число, иначе 0
+*/
+bool isEven(int number);
 
 /**
 * @brief Точка входа в программу
@@ -22,8 +32,7 @@ int main()
     int firstNumber, secondNumber;
     firstNumber = getNumber();
     secondNumber = getNumber();
-    int solve = parityFunc(firstNumber, secondNumber);
-    if (solve == 1)
+    if (parityFunc(firstNumber, secondNumber))
     {
         printf("\n %s", "NO");
     }
@@ -34,25 +43,21 @@ int main()
     return 0;
 }
 
-int parityFunc(int firstNumber, int secondNumber)
+bool parityFunc(int firstNumber, int secondNumber)
 {
-    if ((firstNumber % 2 == 0 && secondNumber % 2 == 1) || (firstNumber % 2 == 1 && secondNumber % 2 == 0))
-    {
-        return 1;
-    }
-    else
-    {
-        return 2;
-    }
+    return (isEven(firstNumber) && isEven(secondNumber) == false) || (isEven(firstNumber) == false && isEven(secondNumber));
+}
+bool isEven(int number) {
+    return ((number % 2) == 0);
 }
 
 float getNumber() 
 { 
-    float number; 
-    if (scanf("%f", &number) == 1 && (number > 0)) 
+ float number; 
+    if (scanf("%f", &number) != 1 || (number < 0)) 
     { 
-    return number; 
+         printf("%s" "Wrong value"); 
+         abort();  
     } 
-    printf("\n" "Неправильный ввод"); 
-    abort(); 
-} 
+    return number;
+}
