@@ -10,7 +10,7 @@ double getEnergy(double mass, double speed);
 
 /**
 * @brief проверка введеного значения
-* @param si значение для перевода массы в систему СИ
+* @param convertToGramm значение для перевода массы в систему СИ
 * @return возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
 */
 double getNumber();
@@ -31,8 +31,8 @@ int main()
 
 double getEnergy(double mass, double speed)
 {
-    const si = 1000;
-    return mass / si * (double) (pow (speed, 2) / 2);
+    const double convertToGramm = 1000;
+    return mass / convertToGramm * (double) (pow (speed, 2) / 2);
 }
 
 double getNumber() 
