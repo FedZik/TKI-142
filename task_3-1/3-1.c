@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+
 /**
 * @brief расситывает значение у
 * @param x значение х получаемое из цикла функции forFunc
@@ -11,6 +13,12 @@ double yFunc();
 * @brief табулирует значения х
 */
 void forFunc();
+
+/**
+* @brief проверка введеного значения
+* @return возвращает значение если ввод правильный, иначе выводит сообщение об ошибке
+*/
+double getNumber();
 
 /**
 * @brief Точка входа в программу
@@ -29,8 +37,22 @@ double yFunc(double x)
 
 void forFunc()
 {
-    for(double x = 2; x <= 3; x += 0.1)
+    double startPoint = getNumber();
+    double endPoint = getNumber();
+    double step = getNumber();
+    for(double x = startPoint; x <= endPoint; x += step)  
     {
         printf ("\n  %9lf", yFunc(x));
     }
+}
+
+double getNumber() 
+{ 
+    double number; 
+    if (scanf("%lf", &number) != 1 || (number < 0)) 
+    { 
+         printf("%s" "Wrong value"); 
+         abort();  
+    } 
+    return number;
 }
