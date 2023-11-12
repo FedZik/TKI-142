@@ -4,10 +4,9 @@
 /**
 * @brief расчет y
 * @param x значение х 
-* @param a значение а
 * @return возвращает значение у
 **/
-double yFunc(double x, const double a);
+double yFunc(double x);
 
 /**
 * @brief проверка введеного значения
@@ -21,15 +20,10 @@ float getNumber();
  **/
 int main()
 {
-    const double a = 2.5;
     double x;
-
     x = getNumber();
-
-    double y = yFunc(x, a);
-
+    double y = yFunc(x);
     printf("\n y= %lf", y);
-    
     return 0;
 }
 
@@ -44,8 +38,9 @@ float getNumber()
     return number;
 }
 
-double yFunc(double x, const double a)
+double yFunc(double x)
 {
-    if (x <= a){ return x * sin(a) * x; }
-    else { return x * pow(x - a, 1.0 / 3); };
+    const double a = 2.5;
+    if (x <= a){return x * sin(a) * x;}
+    else {return x * pow(x - a, 1.0 / 3);};
 }
