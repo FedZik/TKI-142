@@ -40,16 +40,24 @@ void forFunc()
     double startPoint = getNumber();
     double endPoint = getNumber();
     double step = getNumber();
-    for(double x = startPoint; x <= endPoint; x += step)  
+    if (endPoint < startPoint)
     {
+        printf("%s" "Wrong value"); 
+        abort();
+    }
+    else
+    {
+        for(double x = startPoint; x <= endPoint; x += step)  
+        {
         printf ("\n  %9lf", yFunc(x));
+        }
     }
 }
 
 double getNumber() 
 { 
     double number; 
-    if (scanf("%lf", &number) != 1 || (number < 0)) 
+    if (scanf("%lf", &number) != 1) 
     { 
          printf("%s" "Wrong value"); 
          abort();  
