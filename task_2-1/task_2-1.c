@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <float.h>
 
 enum solve
 {
@@ -43,21 +44,20 @@ int main()
     float r = getNumber();
     printf("введите %d чтобы получить объем, или %d чтобы получить площадь поверхности: ", VOLUME, SURFACEAREA);
     int solve = selectSolve();
-    if (solve == VOLUME)
+    switch ("%d", solve)
     {
+    case VOLUME:
         printf("volume = %f", getVolume(r));
-    }
-    if (solve == SURFACEAREA)
-    {
+        break;
+    case SURFACEAREA:
         printf("surface area = %f", getSurfaceArea(r));
-    }
-    if (solve != VOLUME && solve != SURFACEAREA)
-    {
+        break;
+    default:
         printf("\n " "Неправильный ввод" "\n");
+        break;
     }
     return 0;
 }
-
 
 float getVolume(float r)
 {
@@ -72,7 +72,7 @@ float getSurfaceArea(float r)
 float getNumber() 
 { 
  float number; 
-    if (scanf("%f", &number) != 1 || (number < 0)) 
+    if (scanf("%f", &number) != 1 || (number < DBL_EPSILON)) 
     { 
          printf("%s" "Неправильный ввод"); 
          abort();  
@@ -83,13 +83,10 @@ float getNumber()
 int selectSolve()
 {
     int number;
-    if (scanf("%d", &number) == VOLUME || number == SURFACEAREA)
-    {
-        return number;
-    }
-    else
+    if (scanf("%d", &number) != VOLUME && number != SURFACEAREA)
     {
         printf("\n" "Неправильный ввод" "\n");
         abort();
     }
+    return number;
 }
