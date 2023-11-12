@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 
 /**
 * @brief расчет y
@@ -30,7 +31,7 @@ int main()
 float getNumber() 
 { 
  float number; 
-    if (scanf("%f", &number) != 1 || (number < 0)) 
+    if (scanf("%f", &number) != 1 || (number < DBL_EPSILON)) 
     { 
          printf("%s" "Wrong value"); 
          abort();  
