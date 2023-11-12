@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <float.h>
 
 /**
 * @brief расчет второй стороны
@@ -70,7 +70,7 @@ float getPerimeter(float firstSide, float secondSide)
 float getNumber() 
 { 
     float number; 
-    if (scanf("%f", &number) != 1 || (number <= 0)) 
+    if (scanf("%f", &number) != 1 || (number <= DBL_EPSILON)) 
     { 
          printf("%s" "Wrong value"); 
          abort();  
