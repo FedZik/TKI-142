@@ -70,7 +70,7 @@ float getPerimeter(float firstSide, float secondSide)
 float getNumber() 
 { 
     float number; 
-    if (scanf("%f", &number) != 1 || (number < 0)) 
+    if (scanf("%f", &number) != 1 || (number <= 0)) 
     { 
          printf("%s" "Wrong value"); 
          abort();  
