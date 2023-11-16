@@ -22,9 +22,8 @@ float getNumber();
 */
 int main()
 {
-    double mass, speed;
-    mass = getNumber();
-    speed = getNumber();
+    double mass = getNumber();
+    double speed = getNumber();
     double energy = getEnergy(mass, speed);
     printf("\n energy=%lf", energy);
     return 0;
@@ -33,7 +32,7 @@ int main()
 double getEnergy(double mass, double speed)
 {
     const double convertToGramm = 1000;
-    return mass / convertToGramm * (double) (pow (speed, 2) / 2);
+    return mass / convertToGramm * pow (speed, 2) / 2;
 }
 
 float getNumber() 
