@@ -38,7 +38,7 @@ double getEnergy(double mass, double speed)
 float getNumber() 
 { 
  float number; 
-    if (scanf("%f", &number) != 1 || (number < DBL_EPSILON)) 
+    if (scanf("%f", &number) != 1 || (number <= DBL_EPSILON)) 
     { 
          printf("%s" "Wrong value"); 
          abort();  
