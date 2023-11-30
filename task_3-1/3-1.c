@@ -2,13 +2,14 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <float.h>
 
 /**
 * @brief расситывает значение у
 * @param x значение х получаемое из цикла for
 * @return возвращает значение у
 */
-double yFunc();
+double yFunc(double x);
 
 /**
 * @brief проверяет, существует ли функция в точке х
@@ -47,19 +48,18 @@ int main()
     double startPoint = getNumber();
     double endPoint = getNumber();
     double step = getNumber();
-    if(checkStep(step) && comparePoints(startPoint, endPoint))
+
+    checkStep(step);
+    comparePoints(startPoint, endPoint);
+    for(double x = startPoint; x <= endPoint + DBL_EPSILON ; x += step)  
     {
-        for(double x = startPoint; x <= endPoint; x += step)  
+        if (isExists(x))
         {
-            if (isExists(x))
-            {
-                const double y = yFunc(x);
-                printf("\n %7.4lf %7.4lf", x, y);
-            }
-            else
-            {
-                printf("\n %7.4lf %s", x, "no solution");
-            }
+            printf("\n %7.4lf %7.4lf", x, yFunc(x));
+        }
+         else
+        {
+            printf("\n %7.4lf %s", x, "no solution");
         }
     }
     return 0;
@@ -86,7 +86,7 @@ double getNumber()
 
 bool isExists(const double x)
 {
-    if (x > __DBL_EPSILON__)
+    if (x > -DBL_EPSILON)
     {
         return true;
     }
@@ -96,7 +96,7 @@ bool isExists(const double x)
 
 bool checkStep(double step)
 {
-    if (step <= __DBL_EPSILON__)
+    if (step <= DBL_EPSILON)
     {
         errno = EIO; 
         perror("Invalid value entered"); 
@@ -107,7 +107,7 @@ bool checkStep(double step)
 
 bool comparePoints(double startPoint, double endPoint)
 {
-    if (endPoint <= startPoint)
+    if (startPoint - endPoint >= DBL_EPSILON)
     {
         errno = EIO; 
         perror("Invalid value entered"); 
