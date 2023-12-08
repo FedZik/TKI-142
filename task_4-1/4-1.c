@@ -78,9 +78,19 @@ void thirdTask(int* array, const int length);
 /**
  * @brief находит наибольшее отрицательное значение в массиве
  * @param length длина массива
+ * @param array указатель на заполняемый массив
  * @return array указатель на пустой массив
 */
 int maxNegative (int* array, const int length);
+
+/**
+ * @brief находит первый отрицательный элемент массива
+ * @param array указатель на заполняемый массив
+ * @param length длина массива
+ * @return возвращает первое отрицательное значение массива если оно есть
+ * @return возвращает 0 если в массиве нет отрицательных чисел
+*/
+int firstNegative(int* array, const int length);
 
 /**
  * @brief Точка входа в программу
@@ -109,7 +119,7 @@ int main()
     int number = getInt();
     printf("First task: %d\n", firstTask(mas, length));
     secondTask(mas, length, number);
-    if (maxNegative(mas, length) == INT_MIN)
+    if (maxNegative(mas, length) == 0)
     {
         printf("\nThird task: Not found\n");
     }
@@ -215,7 +225,7 @@ void thirdTask(int* array, const int length)
 
 int maxNegative (int* array, const int length)
 {
-    int number = INT_MIN;
+    int number = firstNegative(array, length);
     for (size_t i = 0; i < length; i++)
     {
         if (array[i] < 0 && array[i] > number)
@@ -224,4 +234,17 @@ int maxNegative (int* array, const int length)
         }
     }
     return number;
+}
+
+int firstNegative(int* array, const int length)
+{
+    for (size_t i = 0; i < length; i++)
+    {
+        if (array[i] < 0)
+        {
+            return array[i];
+        }
+        
+    }
+    return 0;
 }
