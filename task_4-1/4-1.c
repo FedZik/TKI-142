@@ -37,15 +37,19 @@ int* getMemoryArray(const int length);
  * @brief заполняет массив, элементы вводит пользователь
  * @param array указатель на заполняемый массив
  * @param length длина массива
+ * @param min минимальное значение массива
+ * @param max максимальное значение массива
 */
-void userArray(int* array, const size_t length);
+void userArray(int* array, const size_t length, int min, int max);
 
 /**
  * @brief заполняет массив случайными числами в диапазоне [-10:10]
  * @param array указатель на заполняемый массив
  * @param length длина массива
+ * @param min минимальное значение массива
+ * @param max максимальное значение массива
 */
-void randomArray(int* array, const size_t length);
+void randomArray(int* array, const size_t length, int min, int max);
 
 /**
  * @brief освобождение массива
@@ -64,9 +68,8 @@ int firstTask(int* array, size_t length);
  * @brief выводит индексы элементов, значения которых больше заданного числа
  * @param array указатель на заполняемый массив
  * @param length длина массива
- * @param number заданное число
 */
-void secondTask(int* array, size_t length, int number);
+void secondTask(int* array, size_t length);
 
 /**
  * @brief заменяет второй элемент массива на максимальный среди отрицательных и выводит его
@@ -100,34 +103,45 @@ int main()
 {
     printf("insert a length of array \n");
     size_t length = getSizeT();
-    printf("enter %d if you want to fill array by youself or %d to fill array by random numbers \n", userChoice, randomChoice);
-    int choice = getInt();
-    int mas = getMemoryArray(length);
-    switch ("%d", choice)
+    printf("insert mimnimum value \n");
+    int min = getInt();
+    printf("insert maximum value \n");
+    int max = getInt();
+    if (min >= max)
     {
-        case randomChoice:
-            randomArray(mas, length);
-            break;
-        case userChoice:
-            userArray(mas, length);
-            break;
-        default:
-            puts("Entered invalid number!\n");
-            return 1;
-    }
-    printf("enter an integer number \n");
-    int number = getInt();
-    printf("First task: %d\n", firstTask(mas, length));
-    secondTask(mas, length, number);
-    if (maxNegative(mas, length) == 0)
-    {
-        printf("\nThird task: Not found\n");
+        errno = EIO; 
+        perror("Error: ");  
+        abort();
     }
     else
     {
-        thirdTask(mas, length);
+        printf("enter %d if you want to fill array by youself or %d to fill array by random numbers \n", userChoice, randomChoice);
+        int choice = getInt();
+        int mas = getMemoryArray(length);
+        switch ("%d", choice)
+        {
+            case randomChoice:
+                randomArray(mas, length, min, max);
+                break;
+            case userChoice:
+                userArray(mas, length, min, max);
+                break;
+            default:
+                puts("Entered invalid number!\n");
+                return 1;
+        }
+        printf("First task: %d\n", firstTask(mas, length));
+        secondTask(mas, length);
+        if (maxNegative(mas, length) == 0)
+        {
+            printf("\nThird task: Not found\n");
+        }
+        else
+        {
+            thirdTask(mas, length);
+        }
+            freeArray(mas);
     }
-    freeArray(mas);
     return 0;
 }
 
@@ -136,7 +150,8 @@ int getInt()
     int number;
     if (scanf("%d", &number) != 1)
     {
-        puts("Inserted a wrong value\n");
+        errno = EIO; 
+        perror("Error: ");  
         abort();
     }
     return number;
@@ -166,21 +181,31 @@ int* getMemoryArray(const int length)
     return array;
 }
 
-void userArray(int* array, const size_t length)
+void userArray(int* array, const size_t length, int min, int max)
 {
-    puts("Insert array elements:");
+    printf("Insert array elements:");
 
     for (size_t i = 0; i < length; i++)
     {
-        array[i] = getInt();
+        int number = getInt();
+        if (number > min && number < max)
+        {
+            array[i] = number;
+        }
+        else
+        {
+            errno = EIO;
+            perror("Error: \n");
+            abort();
+        }
     }
 }
 
-void randomArray(int* array, const size_t length)
+void randomArray(int* array, const size_t length, int min, int max)
 {
     for (size_t i = 0; i < length; i++)
     {
-        array[i] = rand() % 10 - 10;
+        array[i] = rand() % max + min;
     }
 }
 
@@ -205,8 +230,10 @@ int firstTask(int* array, size_t length)
     return sum;
 }
 
-void secondTask(int* array, size_t length, int number)
+void secondTask(int* array, size_t length)
 {
+    printf("enter an integer number \n");
+    int number = getInt();
     printf("Second task: ");
     for (size_t i = 0; i <= length; i++)
     {
