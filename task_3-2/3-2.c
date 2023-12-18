@@ -23,19 +23,24 @@ double getSum(int count);
 * @return Значение рекурентного члена последовательности. 
 */ 
 double getRecurrent(int k); 
- 
+
+double findFirst();
+
+
 /** 
 * @brief Точка входа в программу. 
 * @return Возвращает 0 в случае успеха. 
 */ 
 int main() 
 { 
-        printf("%s", "Insert the end of the segment: "); 
+        printf("%s", "Insert the end of the segment "); 
         int count = getCount(); 
-        printf("Sum of %d sequence terms: %.15lf \n", count + 1, getSum(count)); 
+        printf("First task: %.15lf \n", getSum(count));
+        printf("%s", "Insert e ");
+        int e = getCount();
         return 0; 
 } 
- 
+
 int getCount() 
 { 
         int count; 
@@ -43,7 +48,7 @@ int getCount()
         if (result != 1 || count < 0) 
         { 
                 errno = EIO; 
-                perror("Ошибка ввода"); 
+                perror("Error:"); 
                 abort(); 
         } 
         return count; 
@@ -51,9 +56,9 @@ int getCount()
  
 double getSum(int count) 
 { 
-        double current = 0.006944444444444;
+        double current = findFirst();
         double sum = current; 
-        for (int k = 0; k < count; k++) 
+        for (int k = 1; k < count; k++) 
         { 
                 current *= getRecurrent(k); 
                 sum += current; 
@@ -65,3 +70,10 @@ double getRecurrent(int k)
 { 
         return 1.0 / ((k + 3) * (k + 4)); 
 }
+
+double findFirst()
+{
+        double k = 0;
+        return 1.0 / ((k + 3) * (k + 4)); 
+}
+
