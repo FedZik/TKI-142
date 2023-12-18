@@ -113,35 +113,25 @@ int main()
         perror("Error: ");  
         abort();
     }
-    else
+    printf("enter %d if you want to fill array by youself or %d to fill array by random numbers \n", userChoice, randomChoice);
+    int choice = getInt();
+    int mas = getMemoryArray(length);
+    switch ("%d", choice)
     {
-        printf("enter %d if you want to fill array by youself or %d to fill array by random numbers \n", userChoice, randomChoice);
-        int choice = getInt();
-        int mas = getMemoryArray(length);
-        switch ("%d", choice)
-        {
-            case randomChoice:
-                randomArray(mas, length, min, max);
-                break;
-            case userChoice:
-                userArray(mas, length, min, max);
-                break;
-            default:
-                puts("Entered invalid number!\n");
-                return 1;
-        }
-        printf("First task: %d\n", firstTask(mas, length));
-        secondTask(mas, length);
-        if (maxNegative(mas, length) == 0)
-        {
-            printf("\nThird task: Not found\n");
-        }
-        else
-        {
-            thirdTask(mas, length);
-        }
-            freeArray(mas);
+        case randomChoice:
+            randomArray(mas, length, min, max);
+            break;
+        case userChoice:
+            userArray(mas, length, min, max);
+            break;
+        default:
+            puts("Entered invalid number!\n");
+            return 1;
     }
+    printf("First task: %d\n", firstTask(mas, length));
+    secondTask(mas, length);
+    thirdTask(mas, length);
+    freeArray(mas);
     return 0;
 }
 
@@ -196,7 +186,7 @@ void userArray(int* array, const size_t length, int min, int max)
         {
             errno = EIO;
             perror("Error: \n");
-            abort();
+            return 1;
         }
     }
 }
@@ -232,6 +222,7 @@ int firstTask(int* array, size_t length)
 
 void secondTask(int* array, size_t length)
 {
+    size_t count = 0;
     printf("enter an integer number \n");
     int number = getInt();
     printf("Second task: ");
@@ -241,13 +232,28 @@ void secondTask(int* array, size_t length)
         {
             printf("%u ", i);
         }
+        else
+        {
+            count += 1;
+        }
+    }
+    if (count == length + 1)
+    {
+        printf("Not found");
     }
 }
 
 void thirdTask(int* array, const int length)
 {
     array[1] = maxNegative(array, length);
-    printf("\nThird task: %d", array[1]);
+    if (array[1] == 0)
+    {
+        printf("\nThird task: Not found\n");
+    }
+    else
+    {
+        printf("\nThird task: %d", array[1]);
+    }
 }
 
 int maxNegative (int* array, const int length)
@@ -259,8 +265,9 @@ int maxNegative (int* array, const int length)
         {
             number = array[i];
         }
-    }
+    }   
     return number;
+    
 }
 
 int firstNegative(int* array, const int length)
