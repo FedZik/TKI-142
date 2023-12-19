@@ -52,6 +52,14 @@ void userArray(int* array, const size_t length, int min, int max);
 void randomArray(int* array, const size_t length, int min, int max);
 
 /**
+* @brief функция копирует массив
+* @param mas  - копия массива
+* @param length - размер массива
+* @return Возвращает копию массива
+*/
+int* copyArray(int* mas , const int length);
+
+/**
  * @brief освобождение массива
  * @param array указатель на массив
 */
@@ -62,14 +70,14 @@ void freeArray(int* array);
  * @param array указатель на заполняемый массив
  * @param length длина массива
 */
-int firstTask(int* array, size_t length);
+const int firstTask(int* array, size_t length);
 
 /**
  * @brief выводит индексы элементов, значения которых больше заданного числа
  * @param array указатель на заполняемый массив
  * @param length длина массива
 */
-void secondTask(int* array, size_t length);
+const int secondTask(int* array, size_t length);
 
 /**
  * @brief заменяет второй элемент массива на максимальный среди отрицательных и выводит его
@@ -84,8 +92,14 @@ void thirdTask(int* array, const int length);
  * @param array указатель на заполняемый массив
  * @return array указатель на пустой массив
 */
-int maxNegative (int* array, const int length);
+const int maxNegative (int* array, const int length);
 
+/**
+* @brief функция печатает массив
+* @param size - размер массива
+* @param a -  массив
+*/
+void PrintArray(int* a, const size_t size);
 /**
  * @brief находит первый отрицательный элемент массива
  * @param array указатель на заполняемый массив
@@ -93,7 +107,7 @@ int maxNegative (int* array, const int length);
  * @return возвращает первое отрицательное значение массива если оно есть
  * @return возвращает 0 если в массиве нет отрицательных чисел
 */
-int firstNegative(int* array, const int length);
+const int firstNegative(int* array, const int length);
 
 /**
  * @brief Точка входа в программу
@@ -111,11 +125,11 @@ int main()
     {
         errno = EIO; 
         perror("Error: ");  
-        abort();
+        return 1;
     }
     printf("enter %d if you want to fill array by youself or %d to fill array by random numbers \n", userChoice, randomChoice);
     int choice = getInt();
-    int mas = getMemoryArray(length);
+    int* mas = getMemoryArray(length);
     switch ("%d", choice)
     {
         case randomChoice:
@@ -130,7 +144,7 @@ int main()
     }
     printf("First task: %d\n", firstTask(mas, length));
     secondTask(mas, length);
-    thirdTask(mas, length);
+    thirdTask(copyArray(mas, length), length);
     freeArray(mas);
     return 0;
 }
@@ -186,7 +200,7 @@ void userArray(int* array, const size_t length, int min, int max)
         {
             errno = EIO;
             perror("Error: \n");
-            return 1;
+            abort();
         }
     }
 }
@@ -204,10 +218,11 @@ void freeArray(int* array)
     if (NULL != array)
     {
         free(array);
+        array = NULL;
     }
 }
 
-int firstTask(int* array, size_t length)
+const int firstTask(int* array, size_t length)
 {
     int sum = 0;
     for (size_t i = 0; i < length; i++)
@@ -220,13 +235,13 @@ int firstTask(int* array, size_t length)
     return sum;
 }
 
-void secondTask(int* array, size_t length)
+const int secondTask(int* array, size_t length)
 {
     size_t count = 0;
     printf("enter an integer number \n");
     int number = getInt();
     printf("Second task: ");
-    for (size_t i = 0; i <= length; i++)
+    for (size_t i = 0; i < length; i++)
     {
         if (array[i] > number)
         {
@@ -237,26 +252,37 @@ void secondTask(int* array, size_t length)
             count += 1;
         }
     }
-    if (count == length + 1)
+    if (count >= length)
     {
         printf("Not found");
     }
 }
 
+int* copyArray(int* mas , const int length)
+{
+    int* mas2 = getMemoryArray(length);
+    for (int i = 0; i < length; i++)
+    {
+         mas2[i] = mas[i];
+    }
+    return mas2;
+}
+
 void thirdTask(int* array, const int length)
 {
-    array[1] = maxNegative(array, length);
-    if (array[1] == 0)
+    int* mascpy = copyArray(array, length);
+    mascpy[1] = maxNegative(array, length);
+    if (mascpy[1] == 0)
     {
-        printf("\nThird task: Not found\n");
+        printf("\nThird task: Not found");
     }
     else
     {
-        printf("\nThird task: %d", array[1]);
+        puts("\nThird task:");
+        PrintArray(mascpy, length);
     }
 }
-
-int maxNegative (int* array, const int length)
+const int maxNegative (int* array, const int length)
 {
     int number = firstNegative(array, length);
     for (size_t i = 0; i < length; i++)
@@ -270,7 +296,7 @@ int maxNegative (int* array, const int length)
     
 }
 
-int firstNegative(int* array, const int length)
+const int firstNegative(int* array, const int length)
 {
     for (size_t i = 0; i < length; i++)
     {
@@ -282,3 +308,12 @@ int firstNegative(int* array, const int length)
     }
     return 0;
 }
+
+void PrintArray(int* a, const size_t size)
+{
+    puts("Array elements: ");
+    for (size_t i = 0; i < size; i++)
+    {
+       printf("Element %zu = %d\n", i, a[i]);
+    }
+ }
