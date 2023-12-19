@@ -125,7 +125,7 @@ size_t getSize();
 * @param size - размер массива.
 * @return Возвращает истину в случае успеха.
 */
-bool checkPositive(int* myArray, size_t size);
+bool checkNegative(int* myArray, size_t size);
 
 /**
 * @brief Функция для заполнения первого массива.
@@ -140,6 +140,12 @@ int maxNegative(int* myArray, size_t size);
 
 
 int firstNegative(int* myArray, size_t size);
+
+
+bool unitCheck(int* myArray, size_t i);
+
+
+int addUnit(int* myArray, size_t i);
 
 
 /**
@@ -187,7 +193,7 @@ int main()
 	}
 	}
 
-	if (checkPositive(myArray, size))
+	if (checkNegative(myArray, size))
 	{
 		
 		printf("Ответ на первое задание: \n");
@@ -336,7 +342,7 @@ int secondArrayLength(int* myArray, size_t size)
 	int countRemoved = 0;
 	for (int i = 0; i < size; i++)
 	{
-		if (myArray[i] % 10 % 2 != 0 && myArray[i] % 3 == 0)
+		if (unitCheck(myArray, i) == false)
 		{
 			countRemoved += 1;
 		}
@@ -350,9 +356,9 @@ int* getSecondArray(int* myArray, size_t size, size_t secondArraySize)
 	int j = 0;
 	for (int i = 0; i < size; i++)
 	{
-		if (myArray[i] % 10 % 2 == 0 || myArray[i] % 3 != 0)
+		if (unitCheck(myArray, i))
 		{
-			secondArray[j] = myArray[i];
+			secondArray[j] = addUnit(myArray, i) + myArray[i];
 			j++;
 		}
 	}
@@ -367,14 +373,13 @@ size_t getSize()
 	return size;
 }
 
-bool checkPositive(int* myArray, size_t size)
+bool checkNegative(int* myArray, size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
 		if (myArray[i] < 0)
 		{
 			return true;
-			break;
 		}
 	}
 	return false;
@@ -414,4 +419,31 @@ int firstNegative(int* myArray, size_t size)
         
     }
     return 0;
+}
+
+
+
+bool unitCheck(int* myArray, size_t i)
+{
+	while (myArray[i] > 0)
+	{
+		int number = myArray[i] % 10;
+		myArray[i] /= 10;
+		if (number == 1)
+		{
+		return true;
+		}
+	}
+	return false;
+}
+
+int addUnit(int* myArray, size_t i)
+{
+	size_t count = 0;
+	while (myArray[i] > 0)
+	{
+		myArray[i] = myArray[i] / 10;
+		count++;
+	}
+	return pow(10, count);
 }
