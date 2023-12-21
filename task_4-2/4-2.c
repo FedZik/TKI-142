@@ -1,449 +1,372 @@
-#include <stdio.h>
-#include <locale.h>
-#include <errno.h>
+#include <memory.h>
+#include <stdlib.h>
 #include <math.h>
 #include <float.h>
-#include <stdlib.h>
+#include <errno.h>
 #include <time.h>
+#include <stdio.h>
 #include <stdbool.h>
+#include <locale.h>
 
 /**
-* @brief Выбор заполнения массива.
+* @brief Функция выводит вариант выбора: Клавиатура или Рандом
 */
-enum Choices
+void userChoise();
+
+/**
+* @brief Пользовательский ввод
+*/
+enum randomOrKeyboard
 {
-	/**
-	* @brief Ручной способ.
-	*/
-	MANUAL = 1,
-	/**
-	* @brief Заполнение массива случайными числами.
-	*/
-	RANDOM = 2
+	Keyboard = 1,
+	Random = 2
 };
 
 /**
-* @brief Функция для считывания элементов массива с клавиатуры.
-* @param size - длина массива.
-* @param myArray - массив.
+* @brief Функция принимающая и проверяющая значение размера на ввод
+* @param message - текст сообщения для пользователя
+* @return Значение размера
 */
-void manualInput(int* myArray, size_t size, const int minimumLimit, const int maximumLimit);
+size_t getSize(char const* message);
 
 /**
-* @brief Функция для заполнения массива случайными числами.
-* @param size - длина массива.
-* @param myArray - массив.
+* @brief Функция выделяющая память под массив
+* @param size - размер массива
+* @return Массив
 */
-void randomInput(int* myArray, size_t size, const int minimumLimit, const int maximumLimit);
+int* initArray(const size_t size);
 
 /**
-* @brief Функция для печати массива.
-* @param array - массив.
-* @param size - длина массива.
+* @brief Функция запалняет массив случайными числами или числами с клавиатуры в зависимости от выбора пользователя
+* @param size - размер массива
+* @param array - массив
 */
-void printArray(int* array, size_t size);
+void fillArray(const size_t size, int* array);
 
 /**
-* @brief Функция для считывания значения с клавиатуры.
-* @param message - сообщение пользователю.
-* @remarks Экстренное завершение программы, в случае неправильного ввода.
-* @return Значение с клавиатуры.
+* @brief Функция считывающая ввод с клавиатуры
+* @param size - размер массива
+* @param array - массив
+*/
+void fillKeyboard(const size_t size, int* array);
+
+/**
+* @brief Функция заполняющая массив рандомными числами
+* @param size - размер массива
+* @param array - массив
+* @return 1 если все хорошо
+*/
+int fillRandom(const size_t size, int* array);
+
+/**
+* @brief Функция выводящая заполненный массив
+* @param size - размер массива
+* @param array - массив
+*/
+int printArray(const size_t size, const int* array);
+
+/**
+* @brief Функция принимающая и проверяющая значение на ввод
+* @param message - текст сообщения для пользователя
+* @return Значение
 */
 int getValue(const char* message);
 
 /**
-* @brief Функция для проверки длинны массива.
-* @param intSize - длина массива.
-* @remarks Экстренное завершение программы, в случае неправильной длинны массива.
+* @brief Функция заменяющая второй элемент на максимальный отрицательный
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает изменёный массив
 */
-void checkSize(int intSize);
+int* replaceSecondElement(const int* const array, size_t size);
 
 /**
-* @brief Функция для проверки массива.
-* @param myArray - первый массив.
-* @remarks Экстренное завершение программы, в случае несуществования массива.
+* @brief Функция вставляющающая k после всех элементов кратную своему номеру
+* @param array - целочисленный массив
+* @param size - размер
+* @param k - элемент
+* @return Возвращает изменёный массив
 */
-void checkArray(int* myArray);
+int* insertK(const int* const array, size_t size, int k);
 
 /**
-* @brief Функция проверки интервала массива на правильность.
-* @param minimumLimit - минимальный возможный элемент массива.checkArray-
-* @param maximumLimit - максимальный возможный элемент массива.
+* @brief Функция формирует массив из исходного по условию 3 задания
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает новый массив A
 */
-void checkSegment(const int minimumLimit, const int maximumLimit);
+int* getArrayA(const int* const array, size_t size);
 
 /**
-* @brief Функция для нахождения индекса минимального положительного элемента массива.
-* @param myArray - первый массив.
-* @param size - длина массива.
-* @return Индекс минимального положительного элемента массива.
+* @brief Поиск максимального отрицательного элемента
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает максимальный отрицательный элемент
 */
-size_t indexMinimumPositive(int* myArray, size_t size);
+int maxNegative(const int* const array, size_t size);
 
 /**
-* @brief Функция для нахождения первого положительного элемента массива.
-* @param myArray - первый массив.
-* @param size - длина массива.
-* @return Максимальный элемент массива.
+* @brief Поиск первого отрицательного элемента
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает первый отрицательный элемент
 */
-size_t indexFirstPositive(int* myArray, size_t size);
+int firstNegative(const int* const array, size_t size);
 
 /**
-* @brief Функция для нахождения длины второго массива.
-* @param myArray - первый массив.
-* @param size - длина первого массива.
-* @return Длина второго массива.
+* @brief получение размера нового массива
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает размер нового массива
 */
-int secondArrayLength(int* myArray, size_t size);
+size_t getNewSize(const int* array, size_t size);
 
 /**
-* @brief Функция для заполнения третьего массива.
-* @param myArray - первый массив.
-* @param size - старая длина массива.
-* @return Третий массив.
+* @brief проверка числа на наличие 1
+* @param array - целочисленный массив
+* @param size - размер
+* @return Возвращает истину в случае успешной проверки
 */
-int* getThirdArray(int* myArray, size_t size);
+bool arrayHasK(const int* const array, int i);
 
 /**
-* @brief Функция для получения второго массива.
-* @param myArray - первый массив.
-* @param size - старая длина массива.
-* @param secondArraySize - длина второго массива.
-* @return Второй массив.
-*/
-int* getSecondArray(int* myArray, size_t size, size_t secondArraySize);
-
-/**
-* @brief Функция считывания размера массива.
-* @return Размер массива
-*/
-size_t getSize();
-
-/**
-* @brief Функция проверки наличия положительных элементов в массиве.
-* @param myArray - массив.
-* @param size - размер массива.
-* @return Возвращает истину в случае успеха.
-*/
-bool checkNegative(int* myArray, size_t size);
-
-/**
-* @brief Функция для заполнения первого массива.
-* @param myArray - массив.
-* @param size - размер массива.
-* @return Первый массив.
-*/
-int* getFirstArray(int* myArray, size_t size);
-
-
-int maxNegative(int* myArray, size_t size);
-
-
-int firstNegative(int* myArray, size_t size);
-
-
-bool unitCheck(int* myArray, size_t i);
-
-
-int addUnit(int* myArray, size_t i);
-
-
-/**
-* @brief Точка входа в программу.
-* @return Возвращает 0 в случае успеха.
+* @brief Точка входа в программу
+* @return Возврящает 0, если программа работает верно, иначе 1
 */
 int main()
 {
 	setlocale(LC_ALL, "RU");
 
-	size_t size = getSize();
+	size_t size = getSize("Введите размер массива: ");
 
-	const int minimumLimit = getValue("Введите минимум массива: ");
-	const int maximumLimit = getValue("Введите максимум массива: ");
-	checkSegment(minimumLimit, maximumLimit);
+	int* array = initArray(size);
+	fillArray(size, array);
 
-	int* myArray = (int*)malloc(size * sizeof(int));
-	checkArray(myArray);
+	puts("Исходный массив:\n");
+	printArray(size, array);
+	int* replacedArraySecondElement = replaceSecondElement(array, size);
 
-	printf("Введите номер соответствующий способу, которым вы хотите ввести массив:\n");
-	printf("%d - для заполнения массива с клавиатуры\n", MANUAL);
-	printf("%d - для заполнения массива случайными числами\n", RANDOM);
+	puts("Массив с заменённым первым отрицательным элементом на 0:\n");
+	printArray(size, replacedArraySecondElement);
 
-	int choice = getValue("");
+	int k = getValue("Введите k: ");
+	int* arrayInsertedK = insertK(array, size, k);
 
-	enum Choices userInput = choice;
+	puts("Массив со вставленным числом после элементов, кратных своему номеру (начиная с 1):\n");
+	printArray(getNewSize(array, size), arrayInsertedK);
+	int* arrayA = getArrayA(array, size);
 
-	switch (userInput)
-	{
-	case MANUAL:
-	{
-		manualInput(myArray, size, minimumLimit, maximumLimit);
-		break;
-	}
-	case RANDOM:
-	{
-		randomInput(myArray, size, minimumLimit, maximumLimit);
-		break;
-	}
-	default:
-	{
-		errno = EIO;
-		perror("Ошибка:");
-		return 1;
-	}
-	}
+	puts("Массив A, сформированный из исходного массива D по 3-му условию:\n");
+	printArray(size, arrayA);
 
-	if (checkNegative(myArray, size))
-	{
-		
-		printf("Ответ на первое задание: \n");
-		printArray(getFirstArray(myArray, size), size);
-	}
-	else 
-	{
-		printf("В массиве нет отрицатиельных чисел.");
-	}
-
-	printf("Ответ на второе задание: \n");
-	printArray(getSecondArray(myArray, size, secondArrayLength(myArray, size)), secondArrayLength(myArray, size));
-
-	printf("Ответ на третье задание: \n");
-	printArray(getThirdArray(myArray, size), size);
-	
-	checkArray(myArray);
-	free(myArray);
 	return 0;
 }
 
-int getValue(const char* message)
+void userChoise()
 {
-	int value;
-	printf("%s", message);
-	int result = scanf("%d", &value);
-	if (result != 1)
-	{
-		errno = EIO;
-		perror("Ошибка ввода");
-		abort();
-	}
-	return value;
+	printf("Заполнение с клавиатуры - %d\n", (int)Keyboard);
+	printf("Случайное заполнение - %d\n", (int)Random);
 }
 
-void checkSize(int intSize)
+size_t getSize(char const* message)
 {
-	if (intSize <= 0)
-	{
-		errno = EIO;
-		perror("Ошибка ввода");
+	int size = getValue(message);
+	if (size < 0) {
+		perror("Неверный массив!\n");
 		abort();
+	}
+	return (size_t)size;
+}
+
+int* initArray(const size_t size)
+{
+	int* arr = malloc(size * sizeof(int));
+	if (arr == NULL)
+	{
+		perror("Невозможно выделить мапять под массив!\n");
+	}
+	return arr;
+}
+
+void fillArray(const size_t size, int* array)
+{
+	puts("Как Вы хотите заполнить массив:\n");
+	userChoise();
+
+	enum randomOrKeyboard choice = getValue("Выберите нужный вариант: ");
+	switch (choice)
+	{
+	case Keyboard:
+		fillKeyboard(size, array);
+		break;
+	case Random:
+		fillRandom(size, array);
+		break;
+	default:
+		perror("Неверный выбор!!\n");
 	}
 }
 
-void checkArray(int* myArray)
+void fillKeyboard(const size_t size, int* array)
 {
-	if (myArray == NULL)
+	const int minimumLimit = getValue("Введите нижнюю границу массива: ");
+	const int maximumLimit = getValue("Введите верхнюю границу массива: ");
+	if (minimumLimit >= maximumLimit)
 	{
 		errno = EIO;
-		perror("Ошибка ввода");
+		perror("Неверные границы!\n");
 		abort();
 	}
-}
-
-void manualInput(int* myArray, size_t size, const int minimumLimit, const int maximumLimit)
-{
+	puts("Введите массив: ");
 	for (size_t i = 0; i < size; i++)
 	{
-		printf("Введите число от %d до %d: ", minimumLimit, maximumLimit);
 		int c = getValue("");
 		if (c < minimumLimit || c > maximumLimit)
 		{
 			errno = EIO;
-			perror("Ошибка ввода");
+			perror("Ошибка ввода!\n");
 			abort();
 		}
-		myArray[i] = c;
+		array[i] = c;
 	}
 }
 
-void randomInput(int* myArray, size_t size, const int minimumLimit, const int maximumLimit)
+int fillRandom(const size_t size, int* array)
 {
+	const int minimumLimit = getValue("Введите нижнюю границу массива: ");
+	const int maximumLimit = getValue("Введите верхнюю границу массива: ");
 	unsigned int ttime = time(NULL);
 	srand(ttime);
 	for (size_t i = 0; i < size; i++)
 	{
-		myArray[i] = minimumLimit + rand() % (maximumLimit - minimumLimit + 1);
+		array[i] = minimumLimit + rand() % (maximumLimit - minimumLimit + 1);
 	}
+	return 1;
 }
 
-void checkSegment(const int minimumLimit, const int maximumLimit)
+int printArray(const size_t size, const int* array)
 {
-	if (minimumLimit > maximumLimit)
+	for (size_t i = 0; i < size; i++)
 	{
-		printf("Неверно введен интервал.");
+		printf("%lu\t%d\n", i, array[i]);
+	}
+	return 1;
+}
+
+int getValue(const char* message)
+{
+	int a;
+	printf("%s", message);
+	int res = scanf_s("%d", &a);
+	if (res != 1)
+	{
+		errno = EIO;
+		perror("Неверное значение\n");
 		abort();
 	}
+	return a;
 }
 
-void printArray(int* array, size_t size)
+int* replaceSecondElement(const int* const array, size_t size)
 {
-	for (size_t i = 0; i < size; i++)
+	int* newArray = initArray(size);
+	for (size_t i=0; i < size; ++i)
 	{
-		printf("%lu %d\n", i, array[i]);
+		newArray[i] = array[i];
 	}
+    newArray[1] = maxNegative(newArray, size);
+	return newArray;
 }
 
-size_t indexMinimumPositive(int* myArray, size_t size)
+int* insertK(const int* const array, size_t size, int k)
 {
-	{
-		int minimumPositiveElement = myArray[indexFirstPositive(myArray, size)];
-		int number = 0;
-		for (size_t i = 0; i < size; i++)
-		{
-			if (minimumPositiveElement > myArray[i] && myArray[i] > 0)
-			{
-				minimumPositiveElement = myArray[i];
-				number = i;
-			}
-		}
-		return number;
-	}
+	int* newArray = initArray(getNewSize(array, size));
+    int j = getNewSize(array, size) - 1;
+    for (int i = size - 1; i >= 0; i--)
+    {
+       
+        newArray[j] = array[i];
+        if (arrayHasK(array, i))
+        {
+            newArray[j - 1] = k;
+            j -= 2;
+        }
+        else
+        {
+            j--;
+        }
+    }
+    return newArray;
 }
 
-size_t indexFirstPositive(int* myArray, size_t size)
+int* getArrayA(const int* const array, size_t size)
 {
-	for (size_t i = 0; i < size; i++)
-	{
-		if (myArray[i] > 0)
-		{
-			return i;
-			break;
-		}
-	}
-}
-
-int* getThirdArray(int* myArray, size_t size)
-{
-	for (size_t i = 0; i < size; i++)
+	int* newArray = initArray(size);
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (abs(i % 2) == 0)
 		{
-			myArray[i] = pow(myArray[i], 2);
+			newArray[i] = pow(array[i], 2);
 		}
 		else
 		{
-			myArray[i] = (float)myArray[i] / (float)i;
+			newArray[i] = array[i] / i;
 		}
 	}
-	return myArray;
+	return newArray;
 }
 
-int secondArrayLength(int* myArray, size_t size)
+
+int maxNegative(const int* const array, size_t size)
 {
-	int countRemoved = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (unitCheck(myArray, i) == false)
-		{
-			countRemoved += 1;
-		}
-	}
-	return (size - countRemoved);
-}
-
-int* getSecondArray(int* myArray, size_t size, size_t secondArraySize)
-{
-	int* secondArray= (int*)malloc(secondArraySize * sizeof(int));
-	int j = 0;
-	for (int i = 0; i < size; i++)
-	{
-		if (unitCheck(myArray, i))
-		{
-			secondArray[j] = addUnit(myArray, i) + myArray[i];
-			j++;
-		}
-	}
-	return secondArray;
-}
-
-size_t getSize()
-{
-	int intSize = getValue("Введите размер массива: ");
-	checkSize(intSize);
-	size_t size = (size_t)(intSize);
-	return size;
-}
-
-bool checkNegative(int* myArray, size_t size)
-{
-	for (size_t i = 0; i < size; i++)
-	{
-		if (myArray[i] < 0)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-int* getFirstArray(int* myArray, size_t size)
-{   
-    myArray[1] = maxNegative(myArray, size);
-    return myArray;
-}
-
-
-
-
-int maxNegative(int* myArray, size_t size)
-{
-    int number = firstNegative(myArray, size);
+    int number = firstNegative(array, size);
     for (size_t i = 0; i < size; i++)
     {
-        if (myArray[i] < 0 && myArray[i] > number)
+        if (array[i] < 0 && array[i] > number)
         {
-            number = myArray[i];
+            number = array[i];
         }
     }   
     return number;
     
 }
 
-int firstNegative(int* myArray, size_t size)
+int firstNegative(const int* array, size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        if (myArray[i] < 0)
+        if (array[i] < 0)
         {
-            return myArray[i];
+            return array[i];
         }
         
     }
     return 0;
 }
 
-
-
-bool unitCheck(int* myArray, size_t i)
+bool arrayHasK(const int* const array, int i)
 {
-	while (myArray[i] > 0)
-	{
-		int number = myArray[i] % 10;
-		myArray[i] /= 10;
-		if (number == 1)
-		{
-		return true;
-		}
-	}
-	return false;
+    int number = abs(array[i]);
+    while(number > 0)
+    {
+        if (number % 10 == 1)
+        {
+            return true;
+        }
+        number /= 10;
+    }
+    return false;
 }
 
-int addUnit(int* myArray, size_t i)
+size_t getNewSize(const int* array, size_t size)
 {
-	size_t count = 0;
-	while (myArray[i] > 0)
-	{
-		myArray[i] = myArray[i] / 10;
-		count++;
-	}
-	return pow(10, count);
+    int quantityOfAddedElement = 0;
+    for (int i = 0;i < size; i++)
+    {
+        if (arrayHasK(array,  i))
+        {
+            quantityOfAddedElement += 1;
+        }
+    }
+    return size + quantityOfAddedElement;
 }
