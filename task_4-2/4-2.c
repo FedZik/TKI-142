@@ -127,7 +127,7 @@ size_t getNewSize(const int* array, size_t size);
 * @param size - размер
 * @return Возвращает истину в случае успешной проверки
 */
-bool arrayHasK(const int* const array, int i);
+bool elementHasK(const int* const array, int i);
 
 /**
 * @brief Точка входа в программу
@@ -146,18 +146,19 @@ int main()
 	printArray(size, array);
 	int* replacedArraySecondElement = replaceSecondElement(array, size);
 
-	puts("Массив с заменённым первым отрицательным элементом на 0:\n");
+	puts("Массив с заменённым вторым элементом на максимальный отрицательный:\n");
 	printArray(size, replacedArraySecondElement);
 
 	int k = getValue("Введите k: ");
 	int* arrayInsertedK = insertK(array, size, k);
 
-	puts("Массив со вставленным числом после элементов, кратных своему номеру (начиная с 1):\n");
+	puts("Массив со вставленным числом К перед всеми элементами, которые содержат 1:\n");
 	printArray(getNewSize(array, size), arrayInsertedK);
 	int* arrayA = getArrayA(array, size);
 
 	puts("Массив A, сформированный из исходного массива D по 3-му условию:\n");
 	printArray(size, arrayA);
+	
 
 	return 0;
 }
@@ -183,7 +184,7 @@ int* initArray(const size_t size)
 	int* arr = malloc(size * sizeof(int));
 	if (arr == NULL)
 	{
-		perror("Невозможно выделить мапять под массив!\n");
+		perror("Невозможно выделить память под массив!\n");
 	}
 	return arr;
 }
@@ -280,13 +281,14 @@ int* replaceSecondElement(const int* const array, size_t size)
 
 int* insertK(const int* const array, size_t size, int k)
 {
-	int* newArray = initArray(getNewSize(array, size));
-    int j = getNewSize(array, size) - 1;
+	const size_t newSize = getNewSize(array, size);
+	int* newArray = initArray(newSize);
+    size_t j = getNewSize(array, size) - 1;
     for (int i = size - 1; i >= 0; i--)
     {
        
         newArray[j] = array[i];
-        if (arrayHasK(array, i))
+        if (elementHasK(array, i))
         {
             newArray[j - 1] = k;
             j -= 2;
@@ -302,7 +304,7 @@ int* insertK(const int* const array, size_t size, int k)
 int* getArrayA(const int* const array, size_t size)
 {
 	int* newArray = initArray(size);
-	for (size_t i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
 	{
 		if (abs(i % 2) == 0)
 		{
@@ -344,7 +346,7 @@ int firstNegative(const int* array, size_t size)
     return 0;
 }
 
-bool arrayHasK(const int* const array, int i)
+bool elementHasK(const int* const array, int i)
 {
     int number = abs(array[i]);
     while(number > 0)
@@ -360,10 +362,10 @@ bool arrayHasK(const int* const array, int i)
 
 size_t getNewSize(const int* array, size_t size)
 {
-    int quantityOfAddedElement = 0;
-    for (int i = 0;i < size; i++)
+    size_t quantityOfAddedElement = 0;
+    for (size_t i = 0;i < size; i++)
     {
-        if (arrayHasK(array,  i))
+        if (elementHasK(array,  i))
         {
             quantityOfAddedElement += 1;
         }
