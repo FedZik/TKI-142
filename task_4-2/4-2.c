@@ -1,7 +1,5 @@
 #include <memory.h>
 #include <stdlib.h>
-#include <math.h>
-#include <float.h>
 #include <errno.h>
 #include <time.h>
 #include <stdio.h>
@@ -56,7 +54,7 @@ void fillKeyboard(const size_t size, int* array);
 * @param array - массив
 * @return 1 если все хорошо
 */
-int fillRandom(const size_t size, int* array);
+void fillRandom(const size_t size, int* array);
 
 /**
 * @brief Функция выводящая заполненный массив
@@ -130,6 +128,12 @@ size_t getNewSize(const int* array, size_t size);
 bool elementHasK(const int* const array, int i);
 
 /**
+ * @brief освобождение массива
+ * @param array указатель на массив
+*/
+void freeArray(int* array);
+
+/**
 * @brief Точка входа в программу
 * @return Возврящает 0, если программа работает верно, иначе 1
 */
@@ -148,17 +152,20 @@ int main()
 
 	puts("Массив с заменённым вторым элементом на максимальный отрицательный:\n");
 	printArray(size, replacedArraySecondElement);
+	free(replacedArraySecondElement);
 
 	int k = getValue("Введите k: ");
 	int* arrayInsertedK = insertK(array, size, k);
 
 	puts("Массив со вставленным числом К перед всеми элементами, которые содержат 1:\n");
 	printArray(getNewSize(array, size), arrayInsertedK);
+	free(arrayInsertedK);
 	int* arrayA = getArrayA(array, size);
 
 	puts("Массив A, сформированный из исходного массива D по 3-му условию:\n");
 	printArray(size, arrayA);
-	
+	freeArray(arrayA);
+	freeArray(array);
 
 	return 0;
 }
@@ -173,7 +180,7 @@ size_t getSize(char const* message)
 {
 	int size = getValue(message);
 	if (size < 0) {
-		perror("Неверный массив!\n");
+		perror("Неверный размер массива!\n");
 		abort();
 	}
 	return (size_t)size;
@@ -181,12 +188,12 @@ size_t getSize(char const* message)
 
 int* initArray(const size_t size)
 {
-	int* arr = malloc(size * sizeof(int));
-	if (arr == NULL)
+	int* array = malloc(size * sizeof(int));
+	if (array == NULL)
 	{
 		perror("Невозможно выделить память под массив!\n");
 	}
-	return arr;
+	return array;
 }
 
 void fillArray(const size_t size, int* array)
@@ -221,18 +228,18 @@ void fillKeyboard(const size_t size, int* array)
 	puts("Введите массив: ");
 	for (size_t i = 0; i < size; i++)
 	{
-		int c = getValue("");
-		if (c < minimumLimit || c > maximumLimit)
+		int value = getValue("");
+		if (value < minimumLimit || value > maximumLimit)
 		{
 			errno = EIO;
 			perror("Ошибка ввода!\n");
 			abort();
 		}
-		array[i] = c;
+		array[i] = value;
 	}
 }
 
-int fillRandom(const size_t size, int* array)
+void fillRandom(const size_t size, int* array)
 {
 	const int minimumLimit = getValue("Введите нижнюю границу массива: ");
 	const int maximumLimit = getValue("Введите верхнюю границу массива: ");
@@ -242,7 +249,6 @@ int fillRandom(const size_t size, int* array)
 	{
 		array[i] = minimumLimit + rand() % (maximumLimit - minimumLimit + 1);
 	}
-	return 1;
 }
 
 int printArray(const size_t size, const int* array)
@@ -256,26 +262,26 @@ int printArray(const size_t size, const int* array)
 
 int getValue(const char* message)
 {
-	int a;
+	int value;
 	printf("%s", message);
-	int res = scanf_s("%d", &a);
-	if (res != 1)
+	int result = scanf_s("%d", &value);
+	if (result != 1)
 	{
 		errno = EIO;
 		perror("Неверное значение\n");
 		abort();
 	}
-	return a;
+	return value;
 }
 
 int* replaceSecondElement(const int* const array, size_t size)
 {
 	int* newArray = initArray(size);
-	for (size_t i=0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		newArray[i] = array[i];
 	}
-    newArray[1] = maxNegative(newArray, size);
+	newArray[1] = maxNegative(newArray, size);
 	return newArray;
 }
 
@@ -283,22 +289,21 @@ int* insertK(const int* const array, size_t size, int k)
 {
 	const size_t newSize = getNewSize(array, size);
 	int* newArray = initArray(newSize);
-    size_t j = getNewSize(array, size) - 1;
-    for (int i = size - 1; i >= 0; i--)
-    {
-       
-        newArray[j] = array[i];
-        if (elementHasK(array, i))
-        {
-            newArray[j - 1] = k;
-            j -= 2;
-        }
-        else
-        {
-            j--;
-        }
-    }
-    return newArray;
+	size_t j = getNewSize(array, size) - 1;
+	for (int i = size - 1; i >= 0; i--)
+	{
+		newArray[j] = array[i];
+		if (elementHasK(array, i))
+		{
+			newArray[j - 1] = k;
+			j -= 2;
+		}
+		else
+		{
+			j--;
+		}
+	}
+	return newArray;
 }
 
 int* getArrayA(const int* const array, size_t size)
@@ -321,54 +326,63 @@ int* getArrayA(const int* const array, size_t size)
 
 int maxNegative(const int* const array, size_t size)
 {
-    int number = firstNegative(array, size);
-    for (size_t i = 0; i < size; i++)
-    {
-        if (array[i] < 0 && array[i] > number)
-        {
-            number = array[i];
-        }
-    }   
-    return number;
-    
+	int number = firstNegative(array, size);
+	for (size_t i = 0; i < size; i++)
+	{
+		if (array[i] < 0 && array[i] > number)
+		{
+			number = array[i];
+		}
+	}
+	return number;
+
 }
 
 int firstNegative(const int* array, size_t size)
 {
-    for (size_t i = 0; i < size; i++)
-    {
-        if (array[i] < 0)
-        {
-            return array[i];
-        }
-        
-    }
-    return 0;
+	for (size_t i = 0; i < size; i++)
+	{
+		if (array[i] < 0)
+		{
+			return array[i];
+		}
+
+	}
+	return 0;
 }
 
 bool elementHasK(const int* const array, int i)
 {
-    int number = abs(array[i]);
-    while(number > 0)
-    {
-        if (number % 10 == 1)
-        {
-            return true;
-        }
-        number /= 10;
-    }
-    return false;
+	int number = abs(array[i]);
+	while (number > 0)
+	{
+		if (number % 10 == 1)
+		{
+			return true;
+		}
+		number /= 10;
+	}
+	return false;
 }
 
 size_t getNewSize(const int* array, size_t size)
 {
-    size_t quantityOfAddedElement = 0;
-    for (size_t i = 0;i < size; i++)
+	size_t quantityOfAddedElement = 0;
+	for (size_t i = 0; i < size; i++)
+	{
+		if (elementHasK(array, i))
+		{
+			quantityOfAddedElement += 1;
+		}
+	}
+	return size + quantityOfAddedElement;
+}
+
+void freeArray(int* array)
+{
+    if (NULL != array)
     {
-        if (elementHasK(array,  i))
-        {
-            quantityOfAddedElement += 1;
-        }
+        free(array);
+        array = NULL;
     }
-    return size + quantityOfAddedElement;
 }
