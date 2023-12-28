@@ -125,13 +125,13 @@ size_t getNewSize(const int* array, size_t size);
 * @param size - размер
 * @return Возвращает истину в случае успешной проверки
 */
-bool elementHasK(const int* const array, int i);
+bool elementHasK(int number);
 
 /**
  * @brief освобождение массива
  * @param array указатель на массив
 */
-void freeArray(int* array);
+void freeArray(int** array);
 
 /**
 * @brief Точка входа в программу
@@ -164,8 +164,8 @@ int main()
 
 	puts("Массив A, сформированный из исходного массива D по 3-му условию:\n");
 	printArray(size, arrayA);
-	freeArray(arrayA);
-	freeArray(array);
+	freeArray(&arrayA);
+	freeArray(&array);
 
 	return 0;
 }
@@ -293,7 +293,7 @@ int* insertK(const int* const array, size_t size, int k)
 	for (int i = size - 1; i >= 0; i--)
 	{
 		newArray[j] = array[i];
-		if (elementHasK(array, i))
+		if (elementHasK(array[i]))
 		{
 			newArray[j - 1] = k;
 			j -= 2;
@@ -306,18 +306,18 @@ int* insertK(const int* const array, size_t size, int k)
 	return newArray;
 }
 
-int* getArrayA(const int* const array, size_t size)
+int* getArrayA(const int* const array, size_t size) 
 {
 	int* newArray = initArray(size);
 	for (int i = 0; i < size; ++i)
 	{
-		if (abs(i % 2) == 0)
+		if (abs(i % 2) != 0)
 		{
-			newArray[i] = pow(array[i], 2);
+			newArray[i] = array[i] * array[i]; 
 		}
 		else
 		{
-			newArray[i] = array[i] / i;
+			newArray[i] = array[i] / (int)i;
 		}
 	}
 	return newArray;
@@ -351,16 +351,16 @@ int firstNegative(const int* array, size_t size)
 	return 0;
 }
 
-bool elementHasK(const int* const array, int i)
+bool elementHasK(int number)
 {
-	int number = abs(array[i]);
-	while (number > 0)
+	int value = abs(number);
+	while (value > 0)
 	{
-		if (number % 10 == 1)
+		if (value % 10 == 1)
 		{
 			return true;
 		}
-		number /= 10;
+		value /= 10;
 	}
 	return false;
 }
@@ -370,7 +370,7 @@ size_t getNewSize(const int* array, size_t size)
 	size_t quantityOfAddedElement = 0;
 	for (size_t i = 0; i < size; i++)
 	{
-		if (elementHasK(array, i))
+		if (elementHasK(array[i]))
 		{
 			quantityOfAddedElement += 1;
 		}
@@ -378,11 +378,8 @@ size_t getNewSize(const int* array, size_t size)
 	return size + quantityOfAddedElement;
 }
 
-void freeArray(int* array)
+void freeArray(int** array)
 {
-    if (NULL != array)
-    {
-        free(array);
-        array = NULL;
-    }
+    free(array);
+    array = NULL;
 }
