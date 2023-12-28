@@ -289,7 +289,7 @@ int* insertK(const int* const array, size_t size, int k)
 	const size_t newSize = getNewSize(array, size);
 	int* newArray = initArray(newSize);
 	size_t j = getNewSize(array, size) - 1;
-	for (int i = size - 1; i >= 0; i--)
+	for (size_t i = size - 1 ; i > 0; --i)
 	{
 		newArray[j] = array[i];
 		if (elementHasK(array[i]))
@@ -308,9 +308,9 @@ int* insertK(const int* const array, size_t size, int k)
 int* getArrayA(const int* const array, size_t size) 
 {
 	int* newArray = initArray(size);
-	for (int i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
-		if (abs(i % 2) != 0)
+		if (abs(i % 2) == 0)
 		{
 			newArray[i] = array[i] * array[i]; 
 		}
