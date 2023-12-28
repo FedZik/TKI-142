@@ -257,7 +257,6 @@ int printArray(const size_t size, const int* array)
 	{
 		printf("%lu\t%d\n", i, array[i]);
 	}
-	return 1;
 }
 
 int getValue(const char* message)
