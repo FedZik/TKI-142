@@ -310,7 +310,7 @@ int* getArrayA(const int* const array, size_t size)
 	int* newArray = initArray(size);
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (abs(i % 2) == 0)
+		if (abs(i % 2) != 0)
 		{
 			newArray[i] = array[i] * array[i]; 
 		}
